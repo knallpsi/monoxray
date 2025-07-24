@@ -166,6 +166,11 @@ protected:
 	ALife::_TIME_ID m_dwWeaponRemoveTime;
 	ALife::_TIME_ID m_dwWeaponIndependencyTime;
 
+	// block vistrela dlya dvuhstvolok
+	bool  m_bBlockOnShotAnim;     
+	bool  m_bShotAnimationIsPlaying;  
+	// end 
+
 	virtual bool IsHudModeNow();
 	virtual bool SOParentIsActor() { return ParentIsActor(); }
 	u8 last_idx;

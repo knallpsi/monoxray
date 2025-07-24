@@ -911,6 +911,9 @@ void CWeapon::Load(LPCSTR section)
 
 	m_firepos = READ_IF_EXISTS(pSettings, r_bool, section, "firepos", true);
 	m_aimpos = READ_IF_EXISTS(pSettings, r_bool, section, "aimpos", true);
+
+	m_bBlockOnShotAnim = !!READ_IF_EXISTS(pSettings, r_bool, section, "block_on_shot_anim", false);
+	m_bShotAnimationIsPlaying = false; 
 }
 
 // demonized: World model on stalkers adjustments
@@ -1262,6 +1265,7 @@ void CWeapon::OnActiveItem()
 void CWeapon::OnHiddenItem()
 {
 	m_BriefInfo_CalcFrame = 0;
+	m_bShotAnimationIsPlaying = false; 
 
 	if (IsGameTypeSingle())
 		SwitchState(eHiding);
@@ -1454,6 +1458,12 @@ bool CWeapon::Action(u16 cmd, u32 flags)
 
 		if (flags & CMD_START)
 		{
+
+			if (m_bBlockOnShotAnim && m_bShotAnimationIsPlaying)
+			{
+				return true;
+			}
+
 			if (pActor && pActor->is_safemode())
 			{
 				pActor->set_safemode(false);
@@ -3077,6 +3087,12 @@ const float& CWeapon::hit_probability() const
 
 void CWeapon::OnStateSwitch(u32 S, u32 oldState)
 {
+
+	if (m_bBlockOnShotAnim && S == eFire)
+	{
+		m_bShotAnimationIsPlaying = true;
+	}
+
 	inherited::OnStateSwitch(S, oldState);
 	m_BriefInfo_CalcFrame = 0;
 
@@ -3108,6 +3124,12 @@ void CWeapon::OnStateSwitch(u32 S, u32 oldState)
 
 void CWeapon::OnAnimationEnd(u32 state)
 {
+	
+	if (m_bBlockOnShotAnim && state == eFire)
+	{
+		m_bShotAnimationIsPlaying = false;
+	}
+
 	inherited::OnAnimationEnd(state);
 }
 
