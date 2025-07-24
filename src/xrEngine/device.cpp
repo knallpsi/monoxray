@@ -368,6 +368,7 @@ void CRenderDevice::on_idle()
 		mView.build_camera_dir(vCameraPosition, vCameraDirection, vCameraTop);
 	}
 
+	// Растяжение экрана вместо черных полосок 
 	Fmatrix& proj = Device.mProject;
 
 	float aspect = (float)Device.dwWidth / (float)Device.dwHeight;
