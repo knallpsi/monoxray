@@ -1459,7 +1459,7 @@ bool CWeapon::Action(u16 cmd, u32 flags)
 		if (flags & CMD_START)
 		{
 
-			if (m_bBlockOnShotAnim && m_bShotAnimationIsPlaying)
+			if (m_bBlockOnShotAnim && m_bShotAnimationIsPlaying && IsZoomed())
 			{
 				return true;
 			}
@@ -3087,10 +3087,17 @@ const float& CWeapon::hit_probability() const
 
 void CWeapon::OnStateSwitch(u32 S, u32 oldState)
 {
-
-	if (m_bBlockOnShotAnim && S == eFire)
+	
+	if (m_bBlockOnShotAnim)
 	{
-		m_bShotAnimationIsPlaying = true;
+		if (S == eFire)
+		{
+			m_bShotAnimationIsPlaying = true;
+		}
+		else if (oldState == eFire)
+		{
+			m_bShotAnimationIsPlaying = false;
+		}
 	}
 
 	inherited::OnStateSwitch(S, oldState);
@@ -3124,12 +3131,6 @@ void CWeapon::OnStateSwitch(u32 S, u32 oldState)
 
 void CWeapon::OnAnimationEnd(u32 state)
 {
-	
-	if (m_bBlockOnShotAnim && state == eFire)
-	{
-		m_bShotAnimationIsPlaying = false;
-	}
-
 	inherited::OnAnimationEnd(state);
 }
 
