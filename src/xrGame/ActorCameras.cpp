@@ -634,12 +634,34 @@ void CActor::cam_Update(float dt, float fFOV)
 			dir.setHP(camDir.x, camDir.y);
 			Fvector::generate_orthonormal_basis_normalized(dir, dirUp, dirRight);
 
+			// Сначала применяем все смещения, чтобы получить финальную "желаемую" позицию
 			camPos.mad(dir, -0.04 + offsetZ);
 			camPos.mad(dirUp, offsetY);
 			camPos.mad(dirRight, -0.01 + offsetX);
 
 			m_FPCam->m_HPB.set(camDir);
+
+			float min_height_offset = 0.2f;  
+			Fvector start_point = camPos;
+			start_point.y += 1.0f;          
+			Fvector down_dir;
+			down_dir.set(0.f, -1.f, 0.f);  
+
+			collide::rq_result R;
+			if (Level().ObjectSpace.RayPick(start_point, down_dir, 2.0f, collide::rq_target::rqtStatic, R, this))
+			{
+				Fvector hit_point;
+				hit_point.mad(start_point, down_dir, R.range);
+				float ground_y = hit_point.y + min_height_offset;
+
+				if (camPos.y < ground_y)
+				{
+					camPos.y = ground_y;
+				}
+			}
+
 			m_FPCam->m_Position.set(camPos);
+
 			_viewport_near = VIEWPORT_NEAR - 0.08 + viewportNearOffset;
 			//Cameras().ApplyDevice(_viewport_near);
 		}
