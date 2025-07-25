@@ -984,7 +984,7 @@ void CActor::Die(CObject* who)
 		}*/
 		/* avo: end */
 
-		start_tutorial("game_over");
+		//start_tutorial("game_over");
 	}
 	else
 	{
