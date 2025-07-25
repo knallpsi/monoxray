@@ -111,7 +111,7 @@ function checkCam()
 		end
 
 		if db.actor:alive() then
-			return false
+			return false -- polina
 		end
 
 		startCam()
