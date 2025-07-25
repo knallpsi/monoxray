@@ -35,12 +35,12 @@ end, 500)
 function fadeToBlack()
 	level.set_snd_volume(0)
 	if level.set_music_volume then level.set_music_volume(0) end
-	level.set_pp_effector_factor(getFpCamEffectorId(), 1)
+	-- level.set_pp_effector_factor(getFpCamEffectorId(), 1)
 end
 
 function startCam()
-	level.add_pp_effector("black_infinite.ppe", getFpCamEffectorId(), true)
-	level.set_pp_effector_factor(getFpCamEffectorId(), fpCamEffectorMin)
+	-- level.add_pp_effector("black_infinite.ppe", getFpCamEffectorId(), true)
+	-- level.set_pp_effector_factor(getFpCamEffectorId(), fpCamEffectorMin)
 	fpCamEffectorTg = time_global()
 	AddUniqueCall(updateCam)
 	RegisterScriptCallback("main_menu_on_init", main_menu_on_init)
@@ -92,7 +92,7 @@ function updateCam()
 
 	-- Pulsating effect
 	k = (math.sin(k * (math.pi / 2) * 48)) / 30 + k
-	level.set_pp_effector_factor(getFpCamEffectorId(), k)
+	-- level.set_pp_effector_factor(getFpCamEffectorId(), k)
 end
 
 function checkCam()
